@@ -2,10 +2,8 @@
 #include <gl.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-
-#include "include/math_make.h"
 #include <iostream>
-namespace math {
+
 
     void error_callback(int error, const char* description)
     {
@@ -57,4 +55,3 @@ namespace math {
 
         return 0;
     }
-}
