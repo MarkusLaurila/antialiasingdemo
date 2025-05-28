@@ -39,7 +39,10 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/Users/maker/Desktop/antialiasingdemo/cmake-build-debug/glfw-3.4/cmake_install.cmake")
+  include("C:/Users/maker/Desktop/antialiasingdemo/cmake-build-debug/include/glfw-3.4/cmake_install.cmake")
+  include("C:/Users/maker/Desktop/antialiasingdemo/cmake-build-debug/include/glew-2.1.0/build/cmake/cmake_install.cmake")
+  include("C:/Users/maker/Desktop/antialiasingdemo/cmake-build-debug/include/glm/cmake_install.cmake")
+  include("C:/Users/maker/Desktop/antialiasingdemo/cmake-build-debug/include/soil-master/cmake_install.cmake")
 
 endif()
 

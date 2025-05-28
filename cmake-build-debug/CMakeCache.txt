@@ -17,6 +17,9 @@
 //Build shared libraries
 BUILD_SHARED_LIBS:BOOL=OFF
 
+//utilities
+BUILD_UTILS:BOOL=ON
+
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=C:/Program Files/JetBrains/CLion 2025.1/bin/mingw/bin/addr2line.exe
 
@@ -308,11 +311,35 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 //Doxygen documentation generation tool (https://www.doxygen.nl)
 DOXYGEN_EXECUTABLE:FILEPATH=C:/ProgramData/chocolatey/bin/doxygen.exe
 
+//The directory containing a CMake configuration file for GLEW.
+GLEW_DIR:PATH=GLEW_DIR-NOTFOUND
+
+//Path to a file.
+GLEW_INCLUDE_DIR:PATH=GLEW_INCLUDE_DIR-NOTFOUND
+
+//OSMesa mode
+GLEW_OSMESA:BOOL=OFF
+
+//Regal mode
+GLEW_REGAL:BOOL=OFF
+
+//Path to a library.
+GLEW_SHARED_LIBRARY_DEBUG:FILEPATH=GLEW_SHARED_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GLEW_SHARED_LIBRARY_RELEASE:FILEPATH=GLEW_SHARED_LIBRARY_RELEASE-NOTFOUND
+
+//Path to a library.
+GLEW_STATIC_LIBRARY_DEBUG:FILEPATH=GLEW_STATIC_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GLEW_STATIC_LIBRARY_RELEASE:FILEPATH=GLEW_STATIC_LIBRARY_RELEASE-NOTFOUND
+
 //Value Computed by CMake
-GLFW_BINARY_DIR:STATIC=C:/Users/maker/Desktop/antialiasingdemo/cmake-build-debug/glfw-3.4
+GLFW_BINARY_DIR:STATIC=C:/Users/maker/Desktop/antialiasingdemo/cmake-build-debug/include/glfw-3.4
 
 //Build the GLFW documentation
-GLFW_BUILD_DOCS:BOOL=ON
+GLFW_BUILD_DOCS:BOOL=OFF
 
 //Build the GLFW example programs
 GLFW_BUILD_EXAMPLES:BOOL=OFF
@@ -334,7 +361,7 @@ GLFW_IS_TOP_LEVEL:STATIC=OFF
 GLFW_LIBRARY_TYPE:STRING=
 
 //Value Computed by CMake
-GLFW_SOURCE_DIR:STATIC=C:/Users/maker/Desktop/antialiasingdemo/glfw-3.4
+GLFW_SOURCE_DIR:STATIC=C:/Users/maker/Desktop/antialiasingdemo/include/glfw-3.4
 
 //Force use of high-performance GPU on hybrid systems
 GLFW_USE_HYBRID_HPG:BOOL=OFF
@@ -353,6 +380,21 @@ antialiasing_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 antialiasing_SOURCE_DIR:STATIC=C:/Users/maker/Desktop/antialiasingdemo
+
+//Value Computed by CMake
+glew_BINARY_DIR:STATIC=C:/Users/maker/Desktop/antialiasingdemo/cmake-build-debug/include/glew-2.1.0/build/cmake
+
+//Value Computed by CMake
+glew_IS_TOP_LEVEL:STATIC=OFF
+
+//Dependencies for the target
+glew_LIB_DEPENDS:STATIC=general;-nostdlib;general;opengl32;general;glu32;
+
+//Value Computed by CMake
+glew_SOURCE_DIR:STATIC=C:/Users/maker/Desktop/antialiasingdemo/include/glew-2.1.0/build/cmake
+
+//Dependencies for the target
+glew_s_LIB_DEPENDS:STATIC=general;opengl32;general;glu32;
 
 
 ########################
@@ -491,7 +533,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -557,6 +599,16 @@ FIND_PACKAGE_MESSAGE_DETAILS_Doxygen:INTERNAL=[C:/ProgramData/chocolatey/bin/dox
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[opengl32][c ][v()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//ADVANCED property for variable: GLEW_INCLUDE_DIR
+GLEW_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GLEW_SHARED_LIBRARY_DEBUG
+GLEW_SHARED_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GLEW_SHARED_LIBRARY_RELEASE
+GLEW_SHARED_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GLEW_STATIC_LIBRARY_DEBUG
+GLEW_STATIC_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GLEW_STATIC_LIBRARY_RELEASE
+GLEW_STATIC_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //GLFW pkg-config Libs.private
 GLFW_PKG_CONFIG_LIBS_PRIVATE:INTERNAL= -lgdi32
 //GLFW pkg-config Requires.private
