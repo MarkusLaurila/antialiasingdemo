@@ -5,12 +5,20 @@ using namespace std;
 
 SHADER::SHADER(const char *vertexPath, const char *fragmentPath) {
 
+	std::ifstream Verttest(vertexPath);
+	if (!Verttest.is_open()) {
+		std::cerr << "Vertex shader file not found: " << vertexPath << std::endl;
+	}
+	std::ifstream Fragtest(fragmentPath);
+	if (!Fragtest.is_open()) {
+		std::cerr << "Vertex shader file not found: " << vertexPath << std::endl;
+	}
 		// Using File I/O, load in the shader's code stored on the computer
 		std::string vertexCode; std::string fragmentCode;
 		std::ifstream vShaderFile; std::ifstream fShaderFile;
 		// To handle potential exceptions
-		vShaderFile.exceptions(std::ifstream::badbit);
-		fShaderFile.exceptions(std::ifstream::badbit);
+		vShaderFile.exceptions(std::ifstream::badbit|std::ifstream::failbit);
+		fShaderFile.exceptions(std::ifstream::badbit|std::ifstream::failbit);
 		try
 		{
 			// Open files
@@ -31,8 +39,10 @@ SHADER::SHADER(const char *vertexPath, const char *fragmentPath) {
 		{
 			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 		}
+		// std::cout << "Vertex Shader Source:\n" << vertexCode << std::endl;
+		// std::cout << "Fragment Shader Source:\n" << fragmentCode << std::endl;
 		const GLchar* vShaderCode = vertexCode.c_str();
-		const GLchar * fShaderCode = fragmentCode.c_str();
+		const GLchar* fShaderCode = fragmentCode.c_str();
 		// 2. Compile shaders
 		GLuint vertex, fragment;
 		GLint success;
@@ -71,10 +81,9 @@ SHADER::SHADER(const char *vertexPath, const char *fragmentPath) {
 			glGetProgramInfoLog(this->program, 512, NULL, infoLog);
 			std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 		}
-		// Delete the shaders as they're linked into our program now and no longer necessery
+
 		glDeleteShader(vertex);
 		glDeleteShader(fragment);
-
 }
 void SHADER::UseShader() {
     glUseProgram(this->program);

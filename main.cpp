@@ -6,6 +6,7 @@
 #include <gtc/type_ptr.hpp>
 #include "header/Shader.h"
 #include "header/Display.h"
+#include <direct.h>
 using namespace std;
 using namespace glm;
 
@@ -28,6 +29,10 @@ void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 void movement();
 
     int main() {
+        //Current working directory call
+        char cwd[1024];
+        _getcwd(cwd, sizeof(cwd));
+        std::cout << "Current working directory: " << cwd << std::endl;
 
     DISPLAY display;
         display.createWindow(800, 600);
@@ -41,10 +46,11 @@ void movement();
         glViewport(0,0,800,600);
         glEnable(GL_DEPTH_TEST);
 
+        glfwSetInputMode(window,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
         glfwSetKeyCallback(window, key_callback);
         glfwSetCursorPosCallback(window, mouse_callback);
 
-        SHADER shader ("./shader/shader.vert", "./shader/shader.frag");
+        SHADER shader ("../shader/shader.vert", "../shader/shader.frag");
 
         GLfloat vertices[] = {
             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -99,16 +105,16 @@ void movement();
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(2,2,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(1,2,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+        glEnableVertexAttribArray(1);
 
 
-        GLuint texture, texture1;
-        glGenTextures(1, &texture);
+        GLuint texture0, texture1;
+        glGenTextures(1, &texture0);
         glGenTextures(1, &texture1);
 
 
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glBindTexture(GL_TEXTURE_2D, texture0);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -118,9 +124,11 @@ void movement();
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         int width, height;
-        unsigned char* image = SOIL_load_image("./images/black.png", &width, &height, 0, SOIL_LOAD_RGB);
+        unsigned char* image = SOIL_load_image("../images/black.png", &width, &height, 0, SOIL_LOAD_RGB);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-
+        if (!image) {
+            cerr<<"Failed to load image 0"<<endl;
+        }
         glGenerateMipmap(GL_TEXTURE_2D);
         SOIL_free_image_data(image);
 
@@ -134,10 +142,12 @@ void movement();
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        image = SOIL_load_image("./images/himohoikkahomer.png", &width, &height, 0, SOIL_LOAD_RGB);
+            //TODO: Fix himohoikkahomer not loading correctly(wrong size?)
+        image = SOIL_load_image("../images/himohoikkahomer.png", &width, &height, 0, SOIL_LOAD_RGB);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-
+        if (!image) {
+            cerr << "Failed to load image 1" << endl;
+        }
         glGenerateMipmap(GL_TEXTURE_2D);
         SOIL_free_image_data(image);
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -156,6 +166,10 @@ void movement();
             vec3(1.5f,  0.2f, -1.5f),
             vec3(-1.3f,  1.0f, -1.5f)
         };
+        GLenum err;
+        while ((err = glGetError()) != GL_NO_ERROR) {
+            std::cout << "OpenGL Error: " << err << std::endl;
+        }
         while (!glfwWindowShouldClose(window)) {
 
             GLfloat currentFrame = glfwGetTime();
@@ -171,35 +185,41 @@ void movement();
 
             shader.UseShader();
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, texture);
+            glBindTexture(GL_TEXTURE_2D, texture0);
 
-            glUniform1i(glGetUniformLocation(shader.program, "texture1"), 0);
+            glUniform1i(glGetUniformLocation(shader.program, "texture0"), 0);
             glActiveTexture(GL_TEXTURE1);
 
             glBindTexture(GL_TEXTURE_2D, texture1);
-            glUniform1i(glGetUniformLocation(shader.program, "texture2"), 1);
+            glUniform1i(glGetUniformLocation(shader.program, "texture1"), 1);
 
-            GLfloat radius = 10.0f, camX = sin(glfwGetTime()) * radius, camZ = cos(glfwGetTime()) * radius;
+            // GLfloat radius = 10.0f,camX = sin(glfwGetTime()) * radius,camZ = cos(glfwGetTime()) * radius;
+
             glm::mat4 projection, view;
             view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
             projection = glm::perspective(radians(45.0f), (GLfloat)800 /(GLfloat) 600,0.1f,100.0f);
 
-            GLint modelLoc = glGetUniformLocation(shader.program, "model");
-            GLint viewLoc = glGetUniformLocation(shader.program, "view");
-            GLint projLoc = glGetUniformLocation(shader.program, "projection");
+                GLint modelLoc = glGetUniformLocation(shader.program, "model");
+                GLint viewLoc = glGetUniformLocation(shader.program, "view");
+                GLint projLoc = glGetUniformLocation(shader.program, "projection");
+
+
 
             glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
             glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
             glBindVertexArray(VAO);
 
             for (GLuint i = 0; i < 10; i++) {
-                glm::mat4 model;
+                glm::mat4 model = glm::mat4(1.0f);
                 model = glm::translate(model, cubePositions[i]);
                 model = glm::rotate(model, radians((float)glfwGetTime()*(10.0f * i + 10.0f)), glm::vec3(1.0f, 0.3f, 0.5f));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));;
                 glDrawArrays(GL_TRIANGLES, 0, 36);
             }
-        glBindVertexArray(0);
+
+
+
+            glBindVertexArray(0);
             glfwSwapBuffers(window);
         }
         glfwTerminate();

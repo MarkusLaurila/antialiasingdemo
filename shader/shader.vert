@@ -1,6 +1,6 @@
 #version 330 core
 layout (location = 0) in vec3 position; // The position variable has attribute position 0
-layout (location = 2) in vec2 texCoord; // tex coordinates
+layout (location = 1) in vec2 texCoord; // tex coordinates
 
 out vec2 TexCoord;
 
