@@ -5,6 +5,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include "header/Shader.h"
+#include "header/object_data.h"
 #include "header/Display.h"
 #include <direct.h>
 using namespace std;
@@ -52,57 +53,15 @@ void movement();
 
         SHADER shader ("../shader/shader.vert", "../shader/shader.frag");
 
-        GLfloat vertices[] = {
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-             -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-             -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-             -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-             -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-        };
         GLuint VBO, VAO;
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glBindVertexArray(VAO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)nullptr);
         glEnableVertexAttribArray(0);
 
         glVertexAttribPointer(1,2,GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
@@ -124,7 +83,7 @@ void movement();
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
         int width, height;
-        unsigned char* image = SOIL_load_image("../images/black.png", &width, &height, 0, SOIL_LOAD_RGB);
+        unsigned char* image = SOIL_load_image("../images/black.png", &width, &height, nullptr, SOIL_LOAD_RGB);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
         if (!image) {
             cerr<<"Failed to load image 0"<<endl;
@@ -142,8 +101,8 @@ void movement();
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            //TODO: Fix himohoikkahomer not loading correctly(wrong size?)
-        image = SOIL_load_image("../images/himohoikkahomer.png", &width, &height, 0, SOIL_LOAD_RGB);
+
+        image = SOIL_load_image("../images/himohoikkahomer.png", &width, &height, nullptr, SOIL_LOAD_RGB);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
         if (!image) {
             cerr << "Failed to load image 1" << endl;
@@ -152,20 +111,6 @@ void movement();
         SOIL_free_image_data(image);
         glBindTexture(GL_TEXTURE_2D, 0);
 
-
-        // The positions of the various cubes that will be rendered
-        vec3 cubePositions[] = {
-            vec3(0.0f,  0.0f,  0.0f),
-            vec3(2.0f,  5.0f, -15.0f),
-            vec3(-1.5f, -2.2f, -2.5f),
-            vec3(-3.8f, -2.0f, -12.3f),
-            vec3(2.4f, -0.4f, -3.5f),
-            vec3(-1.7f,  3.0f, -7.5f),
-            vec3(1.3f, -2.0f, -2.5f),
-            vec3(1.5f,  2.0f, -2.5f),
-            vec3(1.5f,  0.2f, -1.5f),
-            vec3(-1.3f,  1.0f, -1.5f)
-        };
         GLenum err;
         while ((err = glGetError()) != GL_NO_ERROR) {
             std::cout << "OpenGL Error: " << err << std::endl;

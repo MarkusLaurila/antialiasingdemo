@@ -24,7 +24,9 @@ add_executable(antialiasing main.cpp  ${GLFW_FILES} ${GLFW_DEPS} ${GLM_MATH} ${S
         header/Display.h
         header/Shader.h
         Shader.cpp
-        Display.cpp)
+        Display.cpp
+        object_data.cpp
+        header/object_data.h)
 add_custom_command(TARGET antialiasing POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         $<TARGET_FILE:glew>
