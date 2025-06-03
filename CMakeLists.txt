@@ -20,10 +20,15 @@ file(GLOB_RECURSE GLFW_DEPS ".glfw-3.4/deps/*.h")
 file(GLOB_RECURSE GLM_MATH ".include/glm/*.hpp")
 file(GLOB_RECURSE SOIL_IMAGE ".include/soil-master/inc/*.h")
 file(GLOB_RECURSE GLEW_INCLUDE ".include/glew-2.1.0/include/GL/*.h")
-find_package(OpenGL REQUIRED)
-add_executable(main main.cpp  ${GLFW_FILES} ${GLFW_DEPS} ${GLM_MATH} ${SOIL_IMAGE} ${GLEW_INCLUDE}
+add_executable(antialiasing main.cpp  ${GLFW_FILES} ${GLFW_DEPS} ${GLM_MATH} ${SOIL_IMAGE} ${GLEW_INCLUDE}
         header/Display.h
         header/Shader.h
         Shader.cpp
         Display.cpp)
-target_link_libraries(main PUBLIC glfw PUBLIC glm PUBLIC soil PUBLIC glew)
+add_custom_command(TARGET antialiasing POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        $<TARGET_FILE:glew>
+        $<TARGET_FILE:glfw>
+        $<TARGET_FILE:soil>
+        $<TARGET_FILE_DIR:antialiasing>)
+target_link_libraries(antialiasing PUBLIC glfw PUBLIC glm PUBLIC soil PUBLIC glew)

@@ -8,15 +8,8 @@ DISPLAY::DISPLAY(): window(nullptr) {
 DISPLAY::~DISPLAY() {
 
 }
-void error_callback(int error, const char* description)
-{
-    fprintf(stderr, "Error: %s\n", description);
-}
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    std::cout<<"Key pressed: "<<key<<std::endl;
-}
+
+
 
 void DISPLAY::createWindow(int height,int width) {
     if (!glfwInit()) {
@@ -28,7 +21,6 @@ void DISPLAY::createWindow(int height,int width) {
     glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE,GL_FALSE);
     this->window=glfwCreateWindow(800,600,"OpenGL Demo", nullptr,nullptr);
-    glfwSetErrorCallback(error_callback);
     if (this->window == nullptr)
     {
         std::cout << "Failed to open window. Fatal Error" << std::endl;
@@ -40,7 +32,7 @@ void DISPLAY::createWindow(int height,int width) {
     glfwMakeContextCurrent(window);
     //1 cycle refresh
     glfwSwapInterval(1);
-    glfwSetKeyCallback(window, key_callback);
+
 
 }
 GLFWwindow* DISPLAY::getWindow() {
