@@ -22,12 +22,14 @@ GLfloat lastFrame = 0.0f;
 GLfloat  lastX = 400, lastY = 300;
 GLfloat yaw1 = -90.0f;
 GLfloat pitch1 = 0.0f;
-
-
+int newWidth, newHeight;
+int oldWidth=800, oldHeight=600;
 bool keys[1024];
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouse_callback(GLFWwindow* window, double xPos, double yPos);
 void movement();
+void Resize(GLFWwindow* window, int width, int height);
+
 
     int main() {
         //Current working directory call
@@ -36,8 +38,11 @@ void movement();
         std::cout << "Current working directory: " << cwd << std::endl;
 
     DISPLAY display;
-        display.createWindow(800, 600);
+        display.createWindow(oldWidth,oldHeight);
         GLFWwindow* window = display.getWindow();
+        Resize(window,oldWidth,oldHeight);
+        newWidth = oldWidth;
+        newHeight = oldHeight;
 
         glewExperimental = true;
         if (glewInit() != GLEW_OK) {
@@ -123,7 +128,11 @@ void movement();
 
             glfwPollEvents();
             movement();
-
+            if (oldWidth != newWidth || oldHeight != newHeight) {
+                Resize(window, newWidth, newHeight);
+                oldWidth = newWidth;
+                oldHeight = newHeight;
+            }
 
             glClearColor(0.3f, 0.1f, 0.5f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,7 +151,7 @@ void movement();
 
             glm::mat4 projection, view;
             view = glm::lookAt(cameraPos,cameraPos + cameraFront, cameraUp);
-            projection = glm::perspective(radians(45.0f), (GLfloat)800 /(GLfloat) 600,0.1f,100.0f);
+            projection = glm::perspective(radians(45.0f), (GLfloat)oldWidth /(GLfloat) oldHeight,0.1f,100.0f);
 
                 GLint modelLoc = glGetUniformLocation(shader.program, "model");
                 GLint viewLoc = glGetUniformLocation(shader.program, "view");
@@ -176,7 +185,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
-
     if (action == GLFW_PRESS)
         keys[key] = true;
     if (action == GLFW_RELEASE)
@@ -233,5 +241,30 @@ void movement() {
     if (keys[GLFW_KEY_D]) {
         cameraPos += glm::normalize(glm::cross(cameraFront,cameraUp)) * cameraSpeed;
     }
+    if (keys[GLFW_KEY_1]) {
+        newWidth = 1024;
+        newHeight = 768;
+    }
+    if (keys[GLFW_KEY_2]) {
+        newWidth = 1280;
+        newHeight = 720;
+    }
+    if (keys[GLFW_KEY_3]) {
+        newWidth = 1600;
+        newHeight = 1024;
+    }
+    if (keys[GLFW_KEY_4]) {
+        newWidth = 1920;
+        newHeight = 1080;
+    }
+
+
+}
+void Resize(GLFWwindow* window, int width, int height) {
+GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    glfwSetWindowPos(window,(mode->width - width)/2,(mode->height-height)/2);
+    glfwSetWindowSize(window,width,height);
+    glViewport(0, 0, width, height);
 
 }

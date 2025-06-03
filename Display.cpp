@@ -38,3 +38,6 @@ void DISPLAY::createWindow(int height,int width) {
 GLFWwindow* DISPLAY::getWindow() {
     return this->window;
 }
+
+
+
